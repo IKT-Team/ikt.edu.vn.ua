@@ -8,7 +8,9 @@ Rails.application.routes.draw do
 
     resources :users, only: %i[index new create]
 
-    resource :upload, only: %i[show new create update]
+    resource :upload, only: %i[new create update]
+
+    get :upload, to: redirect('/contests/%{contest_id}/upload/new')
 
     resources :statistics, :results, only: :index
 
@@ -17,6 +19,12 @@ Rails.application.routes.draw do
     resource :judge, only: %i[show destroy] do
       get :users_csv
       get :judge_xlsx
+    end
+
+    resource :orgcom, only: [], module: :orgcom do
+      resource :session, path: '', as: '', only: %i[show destroy]
+      resource :contest, only: %i[edit update]
+      resources :users, only: %i[index new create edit update]
     end
   end
 
